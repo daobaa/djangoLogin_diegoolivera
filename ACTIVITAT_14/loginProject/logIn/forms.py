@@ -12,9 +12,9 @@ class EmailAuth(forms.Form):
         password = self.cleaned_data.get("password")
 
         if email and password:
-            user = User.objects.filter(email=email).first()
-            if user is None:
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
                 raise forms.ValidationError("Este email no está registrado.")
-            if not user.check_password(password):
-                raise forms.ValidationError("Contraseña incorrecta.")
+
         return self.cleaned_data

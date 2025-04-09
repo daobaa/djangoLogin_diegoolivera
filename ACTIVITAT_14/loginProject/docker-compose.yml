@@ -10,6 +10,8 @@ services:
       - "5432:5432"
     volumes:
       - local_pgdata:/var/lib/postgresql/data
+    networks:
+      - mynetwork
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin4
@@ -20,6 +22,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - mynetwork
   web:
     build:
       context: .
@@ -32,6 +36,12 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    networks:
+      - mynetwork
 volumes:
   local_pgdata:
   pgadmin-data:
+
+networks:
+  mynetwork:
+    driver: bridge
