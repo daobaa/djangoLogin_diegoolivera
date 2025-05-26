@@ -4,18 +4,16 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from .forms import EmailAuth
 from .models import Profile
 
+@login_required(login_url='user_form')
 def index(request):
-    if not request.user.is_authenticated:
-        return redirect('user_form')
+    return redirect('home')
 
-    username = request.user.username
-    return render(request, 'index.html', {'username': username})
+@login_required(login_url='user_form')
 def home(request):
-    if not request.user.is_authenticated:
-        return redirect('user_form')
     db_name = connection.settings_dict['NAME']
     context = {
         'username': request.user.username,
@@ -36,7 +34,7 @@ def user_form(request):
             user_auth = authenticate(username=user.username, password=password)
             if user_auth:
                 login(request, user_auth)
-                return redirect('index')
+                return redirect('home')
             else:
                 return render(request, 'form.html', {'form': form, 'error': 'Contraseña incorrecta.'})
     else:
