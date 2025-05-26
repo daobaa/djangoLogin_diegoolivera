@@ -9,7 +9,15 @@
 </head>
 <body>
     <h1>Segon Projecte - app Login</h1>
-    <a href="{% url 'user_form' %}">Afegir Usuaris</a>
+    {% if request.user.is_authenticated %}
+        <p>Bienvenido, {{ request.user.username }}!</p>
+        <form action="{% url 'logout'%}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Cerrar sesión</button>
+        </form>
+    {% else %}
+        <a href="{% url 'user_form' %}">Iniciar sesión</a>
+    {% endif %}
 
     {% block content %}
     {% endblock %}
