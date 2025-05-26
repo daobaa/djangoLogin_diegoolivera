@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
 {% block content %}
-  <h2>Bienvenido, {{ username }}!</h2>
+  <h2>Bienvenido, {{ username }}! Estás conectado a la base de datos: {{ db_name }}</h2>
   <form action="{% url 'logout' %}" method="post">
     {% csrf_token %}
     <button type="submit">Logout</button>

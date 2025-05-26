@@ -1,5 +1,4 @@
-from tabnanny import check
-
+from django.db import connection
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as auth_logout
@@ -17,9 +16,10 @@ def index(request):
 def home(request):
     if not request.user.is_authenticated:
         return redirect('user_form')
-
-    username = request.user.username
-    context = {'username': username}
+    db_name = connection.settings_dict['NAME']
+    context = {
+        'username': request.user.username,
+        'db_name': db_name}
     return render(request, 'home.html', context)
 
 def user_form(request):
